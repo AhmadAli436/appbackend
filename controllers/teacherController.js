@@ -330,9 +330,9 @@ export const createTeacher = async (req, res) => {
 
      // 📧 Send email to teacher
    const mailOptions = {
-  from: `"InstaOwl" <${process.env.EMAIL_USER}>`,
+  from: `"Smart Education" <${process.env.EMAIL_USER}>`,
   to: email,
-  subject: 'Thank You for Registering – Your InstaOwl Tutor Partner Profile Is Under Review',
+  subject: 'Welcome to Smart Education – Your Teaching Assistant Profile Is Under Review',
   html: `
   <!DOCTYPE html>
   <html lang="en">
@@ -378,8 +378,8 @@ export const createTeacher = async (req, res) => {
 
       <!-- Header -->
       <div class="header">
-        <h2>Hey ${name || 'Teacher'},</h2>
-        <p>Thank you for registering as a Tutor Partner with InstaOwl!</p>
+        <h2>Hey ${name || 'Teaching Assistant'},</h2>
+        <p>Thank you for registering as a Teaching Assistant with Smart Education!</p>
       </div>
 
       <!-- Body -->
@@ -411,13 +411,13 @@ export const createTeacher = async (req, res) => {
 
         <p>We'll notify you once your application is reviewed.</p>
         <p>If you have any questions in the meantime, feel free to reach out.</p>
-        <p>Warm regards,<br>Team InstaOwl</p>
+        <p>Warm regards,<br>Team Smart Education</p>
       </div>
 
       <!-- Footer -->
       <div class="footer">
         <div class="footer-left">
-          <img src="https://insta-owel-admin-bucket.s3.ap-south-1.amazonaws.com/admin_asset/logoinstaowl.png" alt="InstaOwl Logo">
+          <img src="https://insta-owel-admin-bucket.s3.ap-south-1.amazonaws.com/admin_asset/logoinstaowl.png" alt="Smart Education Logo">
           <p>+91 9812132123</p>
           <p>hello@instaowl.com</p>
         </div>

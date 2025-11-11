@@ -219,9 +219,9 @@ const studentDetailsHtml = `
 `;
 
 const mailOptions = {
-  from: `"InstaOwl" <${process.env.EMAIL_USER}>`,
+  from: `"Smart Education" <${process.env.EMAIL_USER}>`,
   to: studentData.parentEmail,
-  subject: 'Thank You for Registering – Your InstaOwl Student Profile Is Under Review',
+  subject: 'Welcome to Smart Education – Your Student Profile Is Under Review',
   html: `
     <!DOCTYPE html>
     <html lang="en">
@@ -246,7 +246,7 @@ const mailOptions = {
         <!-- Blue Header -->
         <div class="header" style="background-color: #1e90ff; color: #ffffff; padding: 20px; text-align: left;">
           <h2 style="margin: 0; font-size: 18px;">Hey ${studentData.name || 'Student'},</h2>
-          <p style="margin: 5px 0 0; font-size: 16px;">Thank you for registering as a student with InstaOwl!</p>
+          <p style="margin: 5px 0 0; font-size: 16px;">Thank you for registering as a student with Smart Education!</p>
         </div>
         <!-- White Body -->
         <div style="padding: 20px; color: #333333;">
@@ -264,13 +264,13 @@ const mailOptions = {
           </div>
           <p style="margin: 0 0 15px; font-size: 16px;">We'll notify you once your application is reviewed.</p>
           <p style="margin: 0 0 15px; font-size: 16px;">If you have any questions in the meantime, feel free to reach out.</p>
-          <p style="margin: 0 0 15px; font-size: 16px;">Warm regards,<br>Team InstaOwl</p>
+          <p style="margin: 0 0 15px; font-size: 16px;">Warm regards,<br>Team Smart Education</p>
         </div>
         <!-- Black Footer -->
         <div class="footer" style="background-color: #000000; color: #ffffff; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
           <div class="footer-left" style="display: flex; align-items: center;">
            <img src="https://insta-owel-admin-bucket.s3.ap-south-1.amazonaws.com/admin_asset/logoinstaowl.png" 
-     alt="InstaOwl Logo" 
+     alt="Smart Education Logo" 
      style="margin-right: 10px; width: 30px; height: 30px;">
 
             <div>

@@ -1,7 +1,7 @@
 
 import jwt from 'jsonwebtoken';
 import Teacher from '../models/Teacher.js';
-import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 import AWS from 'aws-sdk';
 import AppUser from '../models/AppUser.js';
 import Student from '../models/Student.js';
@@ -19,13 +19,25 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION,
 });
 
-const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+} else {
+  console.warn('SENDGRID_API_KEY is not set. Emails will not be sent.');
+}
+
+const sendEmail = async ({ to, subject, html }) => {
+  if (!process.env.SENDGRID_API_KEY) {
+    console.warn('Skipping email send because SENDGRID_API_KEY is missing.');
+    return;
+  }
+  const msg = {
+    to,
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+    subject,
+    html,
+  };
+  await sgMail.send(msg);
+};
 
 // Generate presigned URL for S3 upload
 export const getPresignedUrl = async (req, res) => {
@@ -328,7 +340,6 @@ export const createTeacher = async (req, res) => {
 
      // 📧 Send email to teacher
    const mailOptions = {
-  from: `"Smart Education" <${process.env.EMAIL_USER}>`,
   to: email,
   subject: 'Welcome to Smart Education – Your Teaching Assistant Profile Is Under Review',
   html: `
@@ -435,7 +446,7 @@ export const createTeacher = async (req, res) => {
 };
 
 
-    await transporter.sendMail(mailOptions);
+    await sendEmail(mailOptions);
     console.log('Email sent to:', email);
 
     res.status(201).json({

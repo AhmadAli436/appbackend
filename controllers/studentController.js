@@ -11,7 +11,7 @@ import Notification from '../models/Notification.js';
 import MockTest from '../models/MockTest.js'; // Assuming it exists
 import mongoose from 'mongoose';
 import AppUser from '../models/AppUser.js';
-import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'; // AWS SDK v3
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import Teacher from '../models/Teacher.js';
@@ -28,14 +28,28 @@ const s3Client = new S3Client({
   },
 });
 
-// Configure nodemailer
-const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// Configure SendGrid
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+} else {
+  console.warn('SENDGRID_API_KEY is not set. Emails will not be sent.');
+}
+
+const sendEmail = async ({ to, subject, html }) => {
+  if (!process.env.SENDGRID_API_KEY) {
+    console.warn('Skipping email send because SENDGRID_API_KEY is missing.');
+    return;
+  }
+
+  const msg = {
+    to,
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+    subject,
+    html,
+  };
+
+  await sgMail.send(msg);
+};
 
 // Generate 6-digit PIN
 const generatePin = () => {
@@ -217,7 +231,6 @@ const studentDetailsHtml = `
 `;
 
 const mailOptions = {
-  from: `"Smart Education" <${process.env.EMAIL_USER}>`,
   to: studentData.parentEmail,
   subject: 'Welcome to Smart Education – Your Student Profile Is Under Review',
   html: `
@@ -298,7 +311,7 @@ const mailOptions = {
 };
 
 
-      await transporter.sendMail(mailOptions);
+    await sendEmail(mailOptions);
       console.log(`Email sent to ${student.parentEmail} for student UID: ${uid}`);
     }
 
